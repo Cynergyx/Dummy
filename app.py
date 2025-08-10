@@ -31,11 +31,10 @@ async def read_root(prompt: DummyData):
         return response2
 
 # For deployment: allow running with `python app.py` or via ASGI server
+
+
 if __name__ == "__main__":
-    try:
-        port = int(os.environ.get("PORT", 8000))  # Retrieve PORT or default to 4000
-    except ValueError:  # Handle invalid PORT values
-        print("Invalid PORT environment variable. Using default port 4000.")
-        port = 4000
-    run(app, host="0.0.0.0", port=port)
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
 
