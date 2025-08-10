@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Any
@@ -9,8 +10,6 @@ app = FastAPI()
 class DummyData(BaseModel):
     prompt: str
 
-
-
 @app.post("/chat")
 async def read_root(prompt: DummyData):
     # random function for selecting response
@@ -19,4 +18,9 @@ async def read_root(prompt: DummyData):
         return response1
     else:
         return response2
+
+# For deployment: allow running with `python app.py` or via ASGI server
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
 
