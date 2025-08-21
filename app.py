@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Any
-from response import response1, response2
+from response import response1, response2, response3, response4, response5, response6, response7
 from fastapi.middleware.cors import CORSMiddleware
 import random
 import os
@@ -21,14 +21,17 @@ app.add_middleware(
 class DummyData(BaseModel):
     prompt: str
 
+
+# Accepts optional 'response_id' query parameter to select a specific response (1-7)
 @app.post("/chat")
-async def read_root(prompt: DummyData):
-    # random function for selecting response
-    random_number = random.randint(1, 2)
-    if random_number == 1:
-        return response1
+async def read_root(prompt: DummyData, response_id: int = None):
+    responses = [response1, response2, response3, response4, response5, response6, response7]
+    if response_id is not None:
+        # Clamp response_id to valid range
+        idx = max(1, min(response_id, len(responses)))
+        return responses[idx - 1]
     else:
-        return response2
+        return random.choice(responses)
 
 # For deployment: allow running with `python app.py` or via ASGI server
 
